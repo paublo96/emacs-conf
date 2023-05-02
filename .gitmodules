@@ -1,0 +1,21 @@
+[submodule "packages/compat"]
+	path = packages/compat
+	url = https://github.com/emacs-compat/compat.git
+[submodule "packages/consult"]
+	path = packages/consult
+	url = https://github.com/minad/consult.git
+[submodule "packages/corfu"]
+	path = packages/corfu
+	url = https://github.com/minad/corfu.git
+[submodule "packages/doom-themes"]
+	path = packages/doom-themes
+	url = https://github.com/doomemacs/themes.git
+[submodule "packages/rust-mode"]
+	path = packages/rust-mode
+	url = https://github.com/rust-lang/rust-mode.git
+[submodule "packages/use-package"]
+	path = packages/use-package
+	url = https://github.com/jwiegley/use-package.git
+[submodule "packages/vertico"]
+	path = packages/vertico
+	url = https://github.com/minad/vertico.git
