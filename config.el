@@ -161,7 +161,7 @@
   (setq completion-styles '(flex substring basic))
   (setq completion-ignore-case t)
   (setq read-buffer-completion-ignore-case t)
-  (setq read-file-completion-ignore-case t)
+  (setq read-file-name-completion-ignore-case t)
 
   (keymap-set vertico-map "C-l" 'backward-kill-word)
   (keymap-set vertico-map "C-;" 'vertico-insert)
