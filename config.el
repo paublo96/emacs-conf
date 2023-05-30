@@ -183,3 +183,16 @@
   :bind("C-c i" . consult-imenu))
 (use-package consult-flymake
   :bind("C-c e" . consult-flymake))
+
+;; ---------- Tools ----------
+
+;; Requires compat (loaded previously)
+(add-to-list 'load-path (concat custom-package-dir "/dash"))
+(add-to-list 'load-path (concat custom-package-dir "/transient/lisp"))
+(add-to-list 'load-path (concat custom-package-dir "/with-editor/lisp"))
+(add-to-list 'load-path (concat custom-package-dir "/magit/lisp"))
+(add-to-list 'load-path (concat custom-package-dir "/magit"))
+(use-package magit
+  :bind(("C-c g" . magit-status))
+  :config
+  (setq magit-push-current-set-remote-if-mising nil))
