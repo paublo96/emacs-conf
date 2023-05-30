@@ -184,6 +184,12 @@
 (use-package consult-flymake
   :bind("C-c e" . consult-flymake))
 
+(add-to-list 'load-path (concat custom-package-dir "/yasnippet"))
+;; Template snippet completions
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
 ;; ---------- Tools ----------
 
 ;; Requires compat (loaded previously)
@@ -192,6 +198,7 @@
 (add-to-list 'load-path (concat custom-package-dir "/with-editor/lisp"))
 (add-to-list 'load-path (concat custom-package-dir "/magit/lisp"))
 (add-to-list 'load-path (concat custom-package-dir "/magit"))
+;; Git support
 (use-package magit
   :bind(("C-c g" . magit-status))
   :config

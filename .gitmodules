@@ -31,3 +31,6 @@
 [submodule "packages/with-editor"]
 	path = packages/with-editor
 	url = https://github.com/magit/with-editor.git
+[submodule "packages/yasnippet"]
+	path = packages/yasnippet
+	url = https://github.com/joaotavora/yasnippet.git
