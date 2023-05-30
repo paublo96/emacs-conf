@@ -72,9 +72,9 @@
 
 ;; C/C++ modes redefine <tab> key command which breaks corfu completion
 (add-hook 'c++-mode-hook
- (lambda () (define-key c++-mode-map (kbd "<tab") 'indent-for-tab-command)))
+ (lambda () (define-key c++-mode-map (kbd "<tab>") 'indent-for-tab-command)))
 (add-hook 'c-mode-hook
- (lambda () (define-key c-mode-map (kbd "<tab") 'indent-for-tab-command)))
+ (lambda () (define-key c-mode-map (kbd "<tab>") 'indent-for-tab-command)))
 
 ;; Allow passing more keybindings through term mode
 (add-hook
