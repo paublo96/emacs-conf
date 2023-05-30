@@ -70,6 +70,12 @@
 (global-set-key (kbd "C-c f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-c k") 'kill-buffer-and-window)
 
+;; C/C++ modes redefine <tab> key command which breaks corfu completion
+(add-hook 'c++-mode-hook
+ (lambda () (define-key c++-mode-map (kbd "<tab") 'indent-for-tab-command)))
+(add-hook 'c-mode-hook
+ (lambda () (define-key c-mode-map (kbd "<tab") 'indent-for-tab-command)))
+
 ;; Allow passing more keybindings through term mode
 (add-hook
  'term-mode-hook
