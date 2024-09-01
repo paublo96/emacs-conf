@@ -12,6 +12,7 @@
 (setq column-number-mode t)
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
+(set-face-attribute 'default nil :height 200)
 
 ;; Default behaviors
 (setq confirm-kill-processes nil)
@@ -121,6 +122,14 @@
 
 (add-to-list 'load-path (concat custom-package-dir "/rust-mode"))
 (use-package rust-mode)
+
+(add-to-list 'load-path (concat custom-package-dir "/cmake-mode"))
+(use-package cmake-mode)
+
+(add-to-list 'load-path (concat custom-package-dir "/yaml-mode"))
+(use-package yaml-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
 ;; ---------- Completion ----------
 
