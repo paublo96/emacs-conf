@@ -3,7 +3,7 @@
 ;; ---------- Stock Emacs Options ----------
 
 ;; Default UI style
-(add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -12,11 +12,12 @@
 (setq column-number-mode t)
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
-(set-face-attribute 'default nil :height 200)
+;(set-face-attribute 'default nil :height 200)
 
 ;; Default behaviors
 (setq confirm-kill-processes nil)
 (setq tab-always-indent 'complete)
+(setq ring-bell-function 'ignore)
 
 ;; Default programming style
 (setq-default tab-width 4)
@@ -136,6 +137,7 @@
 ;; eglot requires newer project version than builtin
 (add-to-list 'load-path (concat custom-package-dir "/project"))
 (add-to-list 'load-path (concat custom-package-dir "/external-completion"))
+(add-to-list 'load-path (concat custom-package-dir "/jsonrpc"))
 (add-to-list 'load-path (concat custom-package-dir "/eglot"))
 ;; LSP support
 (use-package eglot
