@@ -214,3 +214,7 @@
   :bind(("C-c g" . magit-status))
   :config
   (setq magit-push-current-set-remote-if-mising nil))
+
+(add-to-list 'load-path (concat custom-package-dir "/hdf5-mode"))
+;; Simple HDF5 file viewer
+(use-package hdf5-mode)
