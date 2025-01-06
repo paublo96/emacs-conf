@@ -215,6 +215,11 @@
   :config
   (setq magit-push-current-set-remote-if-mising nil))
 
+(add-to-list 'load-path (concat custom-package-dir "/sly"))
+(use-package sly-autoloads
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
 (add-to-list 'load-path (concat custom-package-dir "/hdf5-mode"))
 ;; Simple HDF5 file viewer
 (use-package hdf5-mode)

@@ -40,3 +40,6 @@
 [submodule "packages/hdf5-mode"]
 	path = packages/hdf5-mode
 	url = git@github.com:paublo96/emacs-hdf5.git
+[submodule "packages/sly"]
+	path = packages/sly
+	url = https://github.com/joaotavora/sly.git
