@@ -199,7 +199,7 @@
 (add-to-list 'load-path (concat custom-package-dir "/consult"))
 ;; Nice search/navigation commands
 (use-package consult
-  :bind(("C-c g" . consult-grep)
+  :bind(("C-c C-g" . consult-grep)
         ("M-g M-g" . consult-goto-line)))
 (use-package consult-xref
   :init
