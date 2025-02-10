@@ -116,20 +116,22 @@
 
 ;; ---------- Third-Party Packages ----------
 
-;; Load packages from $EMACS_PACKAGE_DIR
-(setq custom-package-dir (getenv "EMACS_PACKAGE_DIR"))
-(package-initialize)
+(setq custom-package-dir
+      (concat (file-name-directory load-file-name) "packages/"))
 
-;; Simplified package management
-(eval-when-compile
-  ;;(push (expand-file-name custom-package-dir "use-package") load-path)
-  (add-to-list 'load-path (concat custom-package-dir "/use-package"))
-  (require 'use-package))
+(defun pm-install-local (package-name package-dir)
+  (unless (package-installed-p package-name)
+    (package-install-file (concat custom-package-dir package-dir))))
+(defun pm-install-local-min-ver (package-name package-dir min-ver)
+  (unless (package-installed-p package-name min-ver)
+    (package-install-file (concat custom-package-dir package-dir))))
 
 ;; ---------- Themes ----------
 
-(add-to-list 'load-path (concat custom-package-dir "/doom-themes"))
+;(add-to-list 'load-path (concat custom-package-dir "/doom-themes"))
+(setq doom-themes-path (concat custom-package-dir "doom-themes"))
 (use-package doom-themes
+  :load-path doom-themes-path
   :config
   (setq doom-themes-enable-bold t)
   (setq doom-themes-enable-italic t)
@@ -137,13 +139,17 @@
 
 ;; ---------- Programming Language Modes ---------
 
-(add-to-list 'load-path (concat custom-package-dir "/rust-mode"))
+;(add-to-list 'load-path (concat custom-package-dir "/rust-mode"))
+(pm-install-local 'rust-mode "rust-mode")
 (use-package rust-mode)
 
-(add-to-list 'load-path (concat custom-package-dir "/cmake-mode"))
-(use-package cmake-mode)
+;(add-to-list 'load-path (concat custom-package-dir "/cmake-mode"))
+(setq cmake-mode-path (concat custom-package-dir "cmake-mode"))
+(use-package cmake-mode
+  :load-path cmake-mode-path)
 
-(add-to-list 'load-path (concat custom-package-dir "/yaml-mode"))
+;(add-to-list 'load-path (concat custom-package-dir "/yaml-mode"))
+(pm-install-local 'yaml-mode "yaml-mode")
 (use-package yaml-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
@@ -151,11 +157,14 @@
 ;; ---------- Completion ----------
 
 ;; eglot requires newer project version than builtin
-(add-to-list 'load-path (concat custom-package-dir "/project"))
-(add-to-list 'load-path (concat custom-package-dir "/external-completion"))
-(add-to-list 'load-path (concat custom-package-dir "/jsonrpc"))
-(add-to-list 'load-path (concat custom-package-dir "/eglot"))
+;(add-to-list 'load-path (concat custom-package-dir "/project"))
+;(add-to-list 'load-path (concat custom-package-dir "/external-completion"))
+;(add-to-list 'load-path (concat custom-package-dir "/jsonrpc"))
+;(add-to-list 'load-path (concat custom-package-dir "/eglot"))
 ;; LSP support
+(pm-install-local-min-ver 'jsonrpc "jsonrpc" '(1 0 24))
+(pm-install-local-min-ver 'eldoc "eldoc-1.15.0.tar" '(1 14 0))
+(pm-install-local-min-ver 'eglot "eglot" '(1 17))
 (use-package eglot
   :config
   (setq eglot-autoshutdown t)
@@ -165,8 +174,10 @@
   (add-hook 'fortran-mode-hook 'eglot-ensure)
   (add-hook 'rust-mode-hook 'eglot-ensure))
 
-(add-to-list 'load-path (concat custom-package-dir "/compat"))
-(add-to-list 'load-path (concat custom-package-dir "/corfu"))
+;(add-to-list 'load-path (concat custom-package-dir "/compat"))
+;(add-to-list 'load-path (concat custom-package-dir "/corfu"))
+(pm-install-local 'compat "compat")
+(pm-install-local 'corfu "corfu")
 ;; LSP completions overlay
 (use-package corfu
   :custom
@@ -175,8 +186,9 @@
   :config
   (global-corfu-mode))
 
-(add-to-list 'load-path (concat custom-package-dir "/vertico"))
-(add-to-list 'load-path (concat custom-package-dir "/vertico/extensions"))
+;(add-to-list 'load-path (concat custom-package-dir "/vertico"))
+;(add-to-list 'load-path (concat custom-package-dir "/vertico/extensions"))
+(pm-install-local 'vertico "vertico")
 ;; Minibuffer completions
 (use-package vertico
   :config
@@ -196,8 +208,9 @@
 (use-package vertico-buffer
   :bind (("C-c b" . vertico-buffer-mode)))
 
-(add-to-list 'load-path (concat custom-package-dir "/consult"))
+;(add-to-list 'load-path (concat custom-package-dir "/consult"))
 ;; Nice search/navigation commands
+(pm-install-local 'consult "consult")
 (use-package consult
   :bind(("C-c C-g" . consult-grep)
         ("M-g M-g" . consult-goto-line)))
@@ -211,7 +224,8 @@
 (use-package consult-flymake
   :bind("C-c e" . consult-flymake))
 
-(add-to-list 'load-path (concat custom-package-dir "/yasnippet"))
+;(add-to-list 'load-path (concat custom-package-dir "/yasnippet"))
+(pm-install-local 'yasnippet "yasnippet")
 ;; Template snippet completions
 (use-package yasnippet
   :config
@@ -220,22 +234,27 @@
 ;; ---------- Tools ----------
 
 ;; Requires compat (loaded previously)
-(add-to-list 'load-path (concat custom-package-dir "/dash"))
-(add-to-list 'load-path (concat custom-package-dir "/transient/lisp"))
-(add-to-list 'load-path (concat custom-package-dir "/with-editor/lisp"))
-(add-to-list 'load-path (concat custom-package-dir "/magit/lisp"))
-(add-to-list 'load-path (concat custom-package-dir "/magit"))
-;; Git support
-(use-package magit
-  :bind(("C-c g" . magit-status))
-  :config
-  (setq magit-push-current-set-remote-if-mising nil))
+;(add-to-list 'load-path (concat custom-package-dir "/dash"))
+;(add-to-list 'load-path (concat custom-package-dir "/transient/lisp"))
+;(add-to-list 'load-path (concat custom-package-dir "/with-editor/lisp"))
+;(add-to-list 'load-path (concat custom-package-dir "/magit/lisp"))
+;(add-to-list 'load-path (concat custom-package-dir "/magit"))
+;(setq dash-path (concat custom-package-dir "dash"))
+;(use-package dash
+;  :load-path dash-path)
+;(pm-install-local 'magit "magit/lisp")
+;;; Git support
+;(use-package magit
+;  :bind(("C-c g" . magit-status))
+;  :config
+;  (setq magit-push-current-set-remote-if-mising nil))
 
-(add-to-list 'load-path (concat custom-package-dir "/sly"))
-(use-package sly-autoloads
-  :config
-  (setq inferior-lisp-program "sbcl"))
+;(add-to-list 'load-path (concat custom-package-dir "/sly"))
+;(use-package sly-autoloads
+;  :config
+;  (setq inferior-lisp-program "sbcl"))
 
-(add-to-list 'load-path (concat custom-package-dir "/hdf5-mode"))
+;(add-to-list 'load-path (concat custom-package-dir "/hdf5-mode"))
 ;; Simple HDF5 file viewer
-(use-package hdf5-mode)
+;(use-package hdf5-mode)
+
