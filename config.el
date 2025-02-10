@@ -1,4 +1,4 @@
-;; Tested on emacs-28.2
+;; Tested on emacs-29.4
 
 ;; ---------- Stock Emacs Options ----------
 
@@ -116,20 +116,20 @@
 
 ;; ---------- Third-Party Packages ----------
 
-(setq custom-package-dir
+(setq package-source-dir
       (concat (file-name-directory load-file-name) "packages/"))
 
 (defun pm-install-local (package-name package-dir)
   (unless (package-installed-p package-name)
-    (package-install-file (concat custom-package-dir package-dir))))
+    (package-install-file (concat package-source-dir package-dir))))
 (defun pm-install-local-min-ver (package-name package-dir min-ver)
   (unless (package-installed-p package-name min-ver)
-    (package-install-file (concat custom-package-dir package-dir))))
+    (package-install-file (concat package-source-dir package-dir))))
 
 ;; ---------- Themes ----------
 
 ;(add-to-list 'load-path (concat custom-package-dir "/doom-themes"))
-(setq doom-themes-path (concat custom-package-dir "doom-themes"))
+(setq doom-themes-path (concat package-source-dir "doom-themes"))
 (use-package doom-themes
   :load-path doom-themes-path
   :config
@@ -144,7 +144,7 @@
 (use-package rust-mode)
 
 ;(add-to-list 'load-path (concat custom-package-dir "/cmake-mode"))
-(setq cmake-mode-path (concat custom-package-dir "cmake-mode"))
+(setq cmake-mode-path (concat package-source-dir "cmake-mode"))
 (use-package cmake-mode
   :load-path cmake-mode-path)
 
@@ -156,15 +156,10 @@
 
 ;; ---------- Completion ----------
 
-;; eglot requires newer project version than builtin
-;(add-to-list 'load-path (concat custom-package-dir "/project"))
-;(add-to-list 'load-path (concat custom-package-dir "/external-completion"))
-;(add-to-list 'load-path (concat custom-package-dir "/jsonrpc"))
-;(add-to-list 'load-path (concat custom-package-dir "/eglot"))
+(pm-install-local-min-ver 'jsonrpc "jsonrpc-1.0.25.tar" '(1 0 25))
+(pm-install-local-min-ver 'eldoc "eldoc-1.15.0.tar" '(1 15 0))
+(pm-install-local-min-ver 'eglot "eglot-1.17.tar" '(1 17))
 ;; LSP support
-(pm-install-local-min-ver 'jsonrpc "jsonrpc" '(1 0 24))
-(pm-install-local-min-ver 'eldoc "eldoc-1.15.0.tar" '(1 14 0))
-(pm-install-local-min-ver 'eglot "eglot" '(1 17))
 (use-package eglot
   :config
   (setq eglot-autoshutdown t)
@@ -174,8 +169,6 @@
   (add-hook 'fortran-mode-hook 'eglot-ensure)
   (add-hook 'rust-mode-hook 'eglot-ensure))
 
-;(add-to-list 'load-path (concat custom-package-dir "/compat"))
-;(add-to-list 'load-path (concat custom-package-dir "/corfu"))
 (pm-install-local 'compat "compat")
 (pm-install-local 'corfu "corfu")
 ;; LSP completions overlay
@@ -186,8 +179,6 @@
   :config
   (global-corfu-mode))
 
-;(add-to-list 'load-path (concat custom-package-dir "/vertico"))
-;(add-to-list 'load-path (concat custom-package-dir "/vertico/extensions"))
 (pm-install-local 'vertico "vertico")
 ;; Minibuffer completions
 (use-package vertico
@@ -208,7 +199,6 @@
 (use-package vertico-buffer
   :bind (("C-c b" . vertico-buffer-mode)))
 
-;(add-to-list 'load-path (concat custom-package-dir "/consult"))
 ;; Nice search/navigation commands
 (pm-install-local 'consult "consult")
 (use-package consult
@@ -224,7 +214,6 @@
 (use-package consult-flymake
   :bind("C-c e" . consult-flymake))
 
-;(add-to-list 'load-path (concat custom-package-dir "/yasnippet"))
 (pm-install-local 'yasnippet "yasnippet")
 ;; Template snippet completions
 (use-package yasnippet
@@ -233,28 +222,27 @@
 
 ;; ---------- Tools ----------
 
-;; Requires compat (loaded previously)
-;(add-to-list 'load-path (concat custom-package-dir "/dash"))
-;(add-to-list 'load-path (concat custom-package-dir "/transient/lisp"))
-;(add-to-list 'load-path (concat custom-package-dir "/with-editor/lisp"))
-;(add-to-list 'load-path (concat custom-package-dir "/magit/lisp"))
-;(add-to-list 'load-path (concat custom-package-dir "/magit"))
-;(setq dash-path (concat custom-package-dir "dash"))
-;(use-package dash
-;  :load-path dash-path)
-;(pm-install-local 'magit "magit/lisp")
-;;; Git support
-;(use-package magit
-;  :bind(("C-c g" . magit-status))
-;  :config
-;  (setq magit-push-current-set-remote-if-mising nil))
+(pm-install-local 'dash "dash")
+(pm-install-local 'with-editor "with-editor/lisp")
+(setq magit-path (concat package-source-dir "../magit-install"))
+(add-to-list 'load-path magit-path)
+(load (concat magit-path "/magit-autoloads"))
+(require 'magit)
+;; Git support
+(use-package magit
+  :bind(("C-c g" . magit-status))
+  :config
+  (setq magit-push-current-set-remote-if-mising nil)
+  (setq magit-section-initial-visibility-alist (quote ((untracked . hide)))))
 
-;(add-to-list 'load-path (concat custom-package-dir "/sly"))
-;(use-package sly-autoloads
-;  :config
-;  (setq inferior-lisp-program "sbcl"))
+;; Lisp IDE
+(add-to-list 'load-path (concat package-source-dir "sly"))
+(require 'sly-autoloads)
+(use-package sly-autoloads
+  :config
+  (setq inferior-lisp-program "sbcl"))
 
-;(add-to-list 'load-path (concat custom-package-dir "/hdf5-mode"))
+(add-to-list 'load-path (concat package-source-dir "hdf5-mode"))
+(require 'hdf5-mode)
 ;; Simple HDF5 file viewer
-;(use-package hdf5-mode)
-
+(use-package hdf5-mode)

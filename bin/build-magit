@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Magit is finicky to install from source. Manually install it through
+# this script
+
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+
+MAGIT_SOURCE_DIR=${SCRIPT_DIR}/../packages/magit
+MAGIT_INSTALL_DIR=${SCRIPT_DIR}/../magit-install
+
+rm -rf ${MAGIT_INSTALL_DIR}
+
+pushd ${MAGIT_SOURCE_DIR}
+
+export EMACS=emacs
+export DESTDIR=${MAGIT_INSTALL_DIR}
+export lispdir=""
+make install-lisp
+make clean
+
+popd

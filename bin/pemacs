@@ -3,5 +3,4 @@
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 INIT_FILE="${SCRIPT_DIR}/../config.el"
 
-export EMACS_PACKAGE_DIR="${SCRIPT_DIR}/../packages"
 emacs -l ${INIT_FILE} $@
