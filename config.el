@@ -8,10 +8,10 @@
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
-(display-time-mode 1)
 (setq column-number-mode t)
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
+(setq mode-line-percent-position nil)
 ;(set-face-attribute 'default nil :height 200)
 
 ;; Default behaviors
@@ -24,6 +24,22 @@
 (setq-default indent-tabs-mode nil)
 (setq c-default-style "bsd")
 (setq c-basic-offset 4)
+
+;; Display current function in header line for programming modes
+(add-hook 'prog-mode-hook
+          (lambda ()
+            ;; Indent header line by line number column
+            (header-line-indent-mode 1)
+            (setq header-line-format
+                  '(""
+                    header-line-indent
+                    (:propertize which-func-current face bold)))
+            (setq which-func-unknown "")
+            (which-function-mode t)
+            ;; Remove which-function from mode line
+            (setq mode-line-misc-info
+                  (assq-delete-all
+                   'which-function-mode mode-line-misc-info))))
 
 ;; Don't allow eldoc to display multiple lines unless prompted manually
 (setq eldoc-echo-area-use-multiline-p nil)
