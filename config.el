@@ -222,7 +222,8 @@
 
 ;; ---------- Tools ----------
 
-(pm-install-local 'dash "dash")
+(add-to-list 'load-path (concat package-source-dir "dash"))
+(require 'dash)
 (pm-install-local 'with-editor "with-editor/lisp")
 (setq magit-path (concat package-source-dir "../magit-install"))
 (add-to-list 'load-path magit-path)
